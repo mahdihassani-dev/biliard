@@ -103,7 +103,7 @@ def rectangle():
     #     label = tk.Label(Winwindow, text="You won!", font=("Arial", 16))
     #     label.pack()
 
-    #Draw new line
+    #Draws new line
     def newLine():
         nonlocal angle, line
         canvas.delete("line")
