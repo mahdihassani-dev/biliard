@@ -2,7 +2,7 @@ import tkinter as tk
 import math
 
 mass = 0.1
-alpha = 1
+alpha = 0.9
 g = 10
 t = 0.08
 fraction_k = 0.3
@@ -24,8 +24,15 @@ def getVelocity(par, v0, a, t, alpha, mass):
 
     return v0
 
-def updateVelocity(v0):
-    return v0 - t*g*fraction_k*8
+
+def updateVelocity(v0, gotHit):
+
+    if gotHit:
+        return math.sqrt(v0**2 - ((2*alpha)/mass)*8)
+    else:
+        return v0 - t * g * fraction_k * 8
+
+
 
 
 def rectangle():
@@ -54,7 +61,8 @@ def rectangle():
             y = newY
 
             # velocity = getVelocity(False, velocity, a, t, alpha, mass)
-            velocity = updateVelocity(velocity)
+            velocity = updateVelocity(velocity, False)
+            print(f'vel not hit = {velocity}')
 
         else:
             if not x1 < newX < x2:
@@ -66,9 +74,8 @@ def rectangle():
                 angle = 360 - angle
 
             # velocity = getVelocity(True, velocity, a, t, alpha, mass)
-            velocity = updateVelocity(velocity)
-
-        print(f'velocity : {velocity}')
+            velocity = updateVelocity(velocity, True)
+            print(f'vel after hit = {velocity}')
 
         canvas.create_text(x, y, text="o", fill="black", font=("Arial", 20), tags="o")
 
@@ -80,8 +87,10 @@ def rectangle():
         elif velocity > 0:
             base.after(80, drawO)
         else:
-            print(f'x = {x}')
-            print(f'y = {y}')
+            global oldPosx, oldPosy
+            print(f'd = {math.sqrt((x - oldPosx) ** 2 + (y - oldPosy) ** 2)}')
+            oldPosx = x
+            oldPosy = y
             newInputs()
 
     def newInputs():
@@ -112,6 +121,9 @@ def rectangle():
 
     x = 410
     y = 260
+    global oldPosx, oldPosy
+    oldPosx = x
+    oldPosy = y
 
     canvas.create_text(x, y, text="o", fill="black", font=("Arial", 20), tags="o")
 
