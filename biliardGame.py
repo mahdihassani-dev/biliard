@@ -62,7 +62,6 @@ def drawO():
             angle = 360 - angle
 
         velocity = updateVelocity(velocity, True)
-        print(f'vel after hit = {velocity}')
 
     canvas.create_text(x, y, text="o", fill="black", font=("Arial", 20), tags="o")
 
@@ -77,7 +76,6 @@ def drawO():
         base.after(80, drawO)
     else:
         global oldPosx, oldPosy
-        print(f'd = {math.sqrt((x - oldPosx) ** 2 + (y - oldPosy) ** 2)}')
         oldPosx = x
         oldPosy = y
         # print(f'x = {x}')
