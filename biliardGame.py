@@ -49,7 +49,6 @@ def drawO():
 
         # velocity = getVelocity(False, velocity, a, t, alpha, mass)
         velocity = updateVelocity(velocity, False)
-        print(f'vel not hit = {velocity}')
 
     else:
         # out of board
