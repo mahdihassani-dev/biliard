@@ -1,37 +1,22 @@
 import tkinter as tk
 import math
 
-# Prerequisites for velocity calculation
+# constants
 mass = 0.1
-alpha = 0.9
+COR = 0.9  # Coefficient of restitution
+COF = 0.3  # Coefficient of friction
 g = 10
-t = 0.08
-fraction_k = 0.3
+t = 0.08  # time in secends
 
 
 # Calculates and updates velocity
 def updateVelocity(v0, gotHit):
     if gotHit:
-        if v0 ** 2 - ((2 * alpha) / mass) <= 0:
-            return 0  # error
-        return math.sqrt(v0 ** 2 - ((2 * alpha) / mass))
+         # hit the edge
+        return COR * v0
     else:
-        return v0 - t * g * fraction_k * 8
-
-
-# Initialize the tkinter window
-base = tk.Tk()
-base.title("board")
-canvas = tk.Canvas(base, width=820, height=520)
-canvas.pack()
-
-
-def aroundTheBorder(newA, a1, a2):
-    if newA >= a2:
-        return a2
-
-    elif newA <= a1:
-        return a1
+        # moving on table
+        return v0 - t * g * COF * 8
 
 
 def drawO():
@@ -47,17 +32,14 @@ def drawO():
         x = newX
         y = newY
 
-        # velocity = getVelocity(False, velocity, a, t, alpha, mass)
         velocity = updateVelocity(velocity, False)
 
     else:
         # out of board
         if not x1 < newX < x2:
-            aroundTheBorder(newX, x1, x2)
             angle = 180 - angle
 
         else:
-            aroundTheBorder(newY, y1, y2)
             angle = 360 - angle
 
         velocity = updateVelocity(velocity, True)
@@ -65,20 +47,17 @@ def drawO():
     canvas.create_text(x, y, text="o", fill="black", font=("Arial", 20), tags="o")
 
     # Positions of winning holes
-    if ((x - 35) * (x - 35) + (y - 35) * (y - 35) < 225 or
-            (x - 785) * (x - 785) + (y - 35) * (y - 35) < 225 or
-            (x - 35) * (x - 35) + (y - 485) * (y - 485) < 225 or
-            (x - 785) * (x - 785) + (y - 485) * (y - 485) < 225):
-        print("YOU WON! ")
-        # victory()
+    if (
+        (x - 35) * (x - 35) + (y - 35) * (y - 35) < 225
+        or (x - 785) * (x - 785) + (y - 35) * (y - 35) < 225
+        or (x - 35) * (x - 35) + (y - 485) * (y - 485) < 225
+        or (x - 785) * (x - 785) + (y - 485) * (y - 485) < 225
+    ):
+        print("YOU WON! ")  # victory()
+
     elif velocity > 0:
         base.after(80, drawO)
     else:
-        global oldPosx, oldPosy
-        oldPosx = x
-        oldPosy = y
-        # print(f'x = {x}')
-        # print(f'y = {y}')
         newInputs()
 
 
@@ -102,6 +81,12 @@ def newLine():
     line = canvas.create_line(x, y, xLineEnd, yLineEnd, fill="red", tags="line")
 
 
+# Initialize the tkinter window
+base = tk.Tk()
+base.title("board")
+canvas = tk.Canvas(base, width=820, height=520)
+canvas.pack()
+
 # Initialize the board
 x1, y1 = 20, 20
 x2, y2 = 800, 500
@@ -111,10 +96,6 @@ canvas.create_rectangle(x1, y1, x2, y2, fill="green")
 x = 410
 y = 260
 
-# to test physics works right
-global oldPosx, oldPosy
-oldPosx = x
-oldPosy = y
 
 canvas.create_text(x, y, text="o", fill="black", font=("Arial", 20), tags="o")
 
