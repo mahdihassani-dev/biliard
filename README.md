@@ -39,8 +39,8 @@
 &ensp; the board or is hit by the table edges.
 
 ## more info
-if you like to know more about the formula follow this link to read more in my medium blog
-<!-- put link here -->
+if you like to know more about the formula, follow this link to read more in my medium
+<a href="https://medium.com/@m.hassani4951383/physics-in-biliard-with-one-ball-103b509ab83a">blog</a>
 
 
 
